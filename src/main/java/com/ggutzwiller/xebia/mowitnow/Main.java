@@ -1,8 +1,12 @@
 package com.ggutzwiller.xebia.mowitnow;
 
+import com.ggutzwiller.xebia.mowitnow.exception.MowItNowException;
+import com.ggutzwiller.xebia.mowitnow.model.GameState;
+import com.ggutzwiller.xebia.mowitnow.parser.GameStateLoader;
+
 /**
  * @author Grégoire Gutzwiller
- * @date 22/12/2019
+ * @since 22/12/2019
  */
 public class Main {
 
@@ -17,7 +21,8 @@ public class Main {
      * @param inputInstructions the instructions as a string
      * @return the solution in a string
      */
-    public static String run(String inputInstructions) {
+    public static String run(String inputInstructions) throws MowItNowException {
+        GameState state = new GameStateLoader().loadFromString(inputInstructions);
         return "";
     }
 }

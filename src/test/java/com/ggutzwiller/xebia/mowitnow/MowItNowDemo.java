@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 /**
  * @author Grégoire Gutzwiller
- * @date 22/12/2019
+ * @since 22/12/2019
  */
 @Test
 public class MowItNowDemo {
