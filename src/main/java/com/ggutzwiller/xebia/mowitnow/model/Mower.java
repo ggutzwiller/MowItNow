@@ -33,4 +33,8 @@ public class Mower {
     public void turnRight() {
         orientation = orientation.right();
     }
+
+    public String toString() {
+        return position.getX() + " " + position.getY() + " " + orientation.label;
+    }
 }

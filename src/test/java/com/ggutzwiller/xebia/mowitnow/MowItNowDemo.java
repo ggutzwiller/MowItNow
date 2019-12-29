@@ -33,7 +33,7 @@ public class MowItNowDemo {
     @Test
     public void demoOutsideGrid() throws MowItNowException {
         String theInstructionSet = "3 3\n1 2 N\nAGAAGAADADDA\n3 3 S\nAGAGGGGA";
-        String theSolution = "1 0 E\n3 2 E";
+        String theSolution = "1 1 E\n3 2 E";
 
         String proposedSolution = Main.run(theInstructionSet);
         Assert.assertEquals(proposedSolution, theSolution);

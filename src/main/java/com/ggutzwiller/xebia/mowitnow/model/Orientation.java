@@ -16,7 +16,7 @@ public enum Orientation {
     WEST("W", -1, 0),
     SOUTH("S", 0, -1);
 
-    private String label;
+    public String label;
     public int x;
     public int y;
 
