@@ -1,8 +1,9 @@
 package com.ggutzwiller.xebia.mowitnow;
 
 import com.ggutzwiller.xebia.mowitnow.exception.MowItNowException;
-import com.ggutzwiller.xebia.mowitnow.model.GameState;
+import com.ggutzwiller.xebia.mowitnow.model.Game;
 import com.ggutzwiller.xebia.mowitnow.parser.GameStateLoader;
+import com.ggutzwiller.xebia.mowitnow.solver.GameSolver;
 
 /**
  * @author Grégoire Gutzwiller
@@ -22,7 +23,9 @@ public class Main {
      * @return the solution in a string
      */
     public static String run(String inputInstructions) throws MowItNowException {
-        GameState state = new GameStateLoader().loadFromString(inputInstructions);
+        Game game = new GameStateLoader().loadFromString(inputInstructions);
+        new GameSolver(game).solve();
+
         return "";
     }
 }

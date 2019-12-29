@@ -9,7 +9,7 @@ import java.util.List;
  * @since 29/12/2019
  */
 @Data
-public class GameState {
+public class Game {
     private Lawn lawn;
     private List<Mower> mowers;
 }

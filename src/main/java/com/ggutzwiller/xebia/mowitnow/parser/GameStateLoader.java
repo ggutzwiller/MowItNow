@@ -2,7 +2,7 @@ package com.ggutzwiller.xebia.mowitnow.parser;
 
 import com.ggutzwiller.xebia.mowitnow.exception.MowItNowException;
 import com.ggutzwiller.xebia.mowitnow.exception.ParseException;
-import com.ggutzwiller.xebia.mowitnow.model.GameState;
+import com.ggutzwiller.xebia.mowitnow.model.Game;
 import com.ggutzwiller.xebia.mowitnow.model.Mower;
 
 import java.util.ArrayList;
@@ -23,14 +23,14 @@ public class GameStateLoader {
         this.instructionsParser = new InstructionsParser();
     }
 
-    public GameState loadFromString(String gameRepresentation) throws MowItNowException {
+    public Game loadFromString(String gameRepresentation) throws MowItNowException {
         String[] splittedLines = gameRepresentation.split("\n");
 
         if (splittedLines.length % 2 == 0) {
             throw new ParseException("Invalid number of lines in game representation.");
         }
 
-        GameState state = new GameState();
+        Game state = new Game();
         state.setLawn(lawnParser.parse(splittedLines[0]));
 
         List<Mower> mowers = new ArrayList<>();
