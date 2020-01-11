@@ -21,9 +21,15 @@ public class Mower {
         this.instructions = new ArrayList<>();
     }
 
-    public void moveForward() {
-        position.setX(position.getX() + orientation.x);
-        position.setY(position.getY() + orientation.y);
+    public Position getNextPosition() {
+        return new Position(
+                position.getX() + orientation.forwardX,
+                position.getY() + orientation.forwardY
+        );
+    }
+
+    public void moveToPosition(Position position) {
+        this.position = position;
     }
 
     public void turnLeft() {

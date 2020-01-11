@@ -2,6 +2,7 @@ package com.ggutzwiller.xebia.mowitnow.model;
 
 import com.ggutzwiller.xebia.mowitnow.exception.OrientationNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
@@ -9,42 +10,37 @@ import java.util.Arrays;
  * @author Grégoire Gutzwiller
  * @since 28/12/2019
  */
+@Slf4j
 @AllArgsConstructor
 public enum Orientation {
-    NORTH("N", 0, 1),
-    EAST("E", 1, 0),
-    WEST("W", -1, 0),
-    SOUTH("S", 0, -1);
+    NORTH("N", 0, 1, "W", "E"),
+    EAST("E", 1, 0, "N", "S"),
+    WEST("W", -1, 0, "S", "N"),
+    SOUTH("S", 0, -1, "E", "W");
 
     public String label;
-    public int x;
-    public int y;
+    public int forwardX;
+    public int forwardY;
+    public String left;
+    public String right;
 
     public Orientation right() {
-        switch (this) {
-            case NORTH:
-                return EAST;
-            case EAST:
-                return SOUTH;
-            case SOUTH:
-                return WEST;
-            case WEST:
-            default:
-                return NORTH;
+        try {
+            return byLabel(this.right);
+        } catch (OrientationNotFoundException e) {
+            /* This is not supposed to happen */
+            log.error("It was not possible to get right Orientation of {}", this.label);
+            return NORTH;
         }
     }
 
     public Orientation left() {
-        switch (this) {
-            case NORTH:
-                return WEST;
-            case WEST:
-                return SOUTH;
-            case SOUTH:
-                return EAST;
-            case EAST:
-            default:
-                return NORTH;
+        try {
+            return byLabel(this.left);
+        } catch (OrientationNotFoundException e) {
+            /* This is not supposed to happen */
+            log.error("It was not possible to get left Orientation of {}", this.label);
+            return NORTH;
         }
     }
 

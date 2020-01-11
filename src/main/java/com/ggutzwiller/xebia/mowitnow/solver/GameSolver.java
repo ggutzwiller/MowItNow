@@ -1,17 +1,28 @@
 package com.ggutzwiller.xebia.mowitnow.solver;
 
-import com.ggutzwiller.xebia.mowitnow.model.*;
-import lombok.AllArgsConstructor;
+import com.ggutzwiller.xebia.mowitnow.model.Game;
+import com.ggutzwiller.xebia.mowitnow.model.Instruction;
+import com.ggutzwiller.xebia.mowitnow.model.Mower;
+import com.ggutzwiller.xebia.mowitnow.model.Position;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Grégoire Gutzwiller
  * @since 29/12/2019
  */
-@AllArgsConstructor
 public class GameSolver {
     private Game game;
+    private Map<Position, Boolean> unavailablePositions;
+
+    public GameSolver(Game game) {
+        this.game = game;
+
+        this.unavailablePositions = new HashMap<>();
+        this.game.getMowers().forEach(m -> unavailablePositions.put(m.getPosition(), true));
+    }
 
     /**
      * Solve the "game" by moving mowers according the instructions and game rules
@@ -20,34 +31,20 @@ public class GameSolver {
         List<Mower> mowers = game.getMowers();
 
         for (Mower mower : mowers) {
+            this.unavailablePositions.put(mower.getPosition(), false);
             for (Instruction instruction : mower.getInstructions()) {
-                if (this.isAuthorizedInstruction(mower, instruction)) {
-                    this.playInstructionOnMower(mower, instruction);
-                }
+                this.playInstructionOnMower(mower, instruction);
             }
+            this.unavailablePositions.put(mower.getPosition(), true);
         }
     }
 
-    private boolean isAuthorizedInstruction(Mower mower, Instruction instruction) {
-        if (instruction == Instruction.MOVE_FORWARD) {
-            Position currentPosition = mower.getPosition();
-            Orientation currentOrientation = mower.getOrientation();
-
-            Position potentialNextPosition = new Position(
-                    currentPosition.getX() + currentOrientation.x,
-                    currentPosition.getY() + currentOrientation.y
-            );
-
-            return !outsideLawn(potentialNextPosition) && !alreadyTakenByMower(potentialNextPosition);
-        }
-        return true;
+    private boolean isPositionAvailable(Position nextPosition) {
+        return !outsideLawn(nextPosition) && !alreadyTakenByMower(nextPosition);
     }
 
     private boolean alreadyTakenByMower(Position potentialNextPosition) {
-        return !game.getMowers()
-                .stream()
-                .noneMatch(m -> m.getPosition().getX() == potentialNextPosition.getX() &&
-                        m.getPosition().getY() == potentialNextPosition.getY());
+        return unavailablePositions.containsKey(potentialNextPosition) && unavailablePositions.get(potentialNextPosition);
     }
 
     private boolean outsideLawn(Position potentialNextPosition) {
@@ -65,7 +62,10 @@ public class GameSolver {
                 break;
             case MOVE_FORWARD:
             default:
-                mower.moveForward();
+                Position nextPosition = mower.getNextPosition();
+                if (isPositionAvailable(nextPosition)) {
+                    mower.moveToPosition(nextPosition);
+                }
                 break;
         }
     }
